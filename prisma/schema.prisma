@@ -10,15 +10,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Service {
-  id        Int      @id @default(autoincrement())
-  type      String   @unique
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
+model Schedule {
+  id            Int        @id @default(autoincrement())
+  userId        Int        @unique
+  user          User       @relation(fields: [userId], references: [id])
+  washTypeId    Int        @unique
+  washType      Whash_Type @relation(fields: [washTypeId], references: [id])
+  cityId        Int        @unique
+  city          City       @relation(fields: [cityId], references: [id])
+  message       String?
+  scheduledDate DateTime   @map(name: "sheduled_date")
+  payment       Boolean
+  createdAt     DateTime   @default(now()) @map(name: "created_at")
+  updatedAt     DateTime   @updatedAt @map(name: "updated_at")
 
-  @@map(name: "services")
+  @@map(name: "schedules")
 }
 
 model User {
@@ -28,7 +34,28 @@ model User {
   name      String
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  services  Service[]
+  Schedule  Schedule?
 
   @@map(name: "users")
+}
+
+model Whash_Type {
+  id        Int       @id @default(autoincrement())
+  type      String    @unique
+  price     Float
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  Schedule  Schedule?
+
+  @@map(name: "wash_types")
+}
+
+model City {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  Schedule  Schedule?
+
+  @@map(name: "cities")
 }
