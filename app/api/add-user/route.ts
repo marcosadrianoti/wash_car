@@ -13,20 +13,20 @@ export async function POST(request: Request){
     console.log('user', user);
     
   
-  if (!user) {
-    const result = await prisma.user.create(
-      {
-        data: {
-          sub,
-          name,
-          email,
-        }
-      }
-    );
-      console.log(result);
+  // if (!user) {
+  //   const result = await prisma.user.create(
+  //     {
+  //       data: {
+  //         sub,
+  //         name,
+  //         email,
+  //       }
+  //     }
+  //   );
+  //     console.log(result);
       
-    return NextResponse.json({"result":"teste"});
-  }
+  //   return NextResponse.json({"result":"teste"});
+  // }
 
-    return NextResponse.json({id: user.id});
+    // return NextResponse.json({id: user.id});
 }

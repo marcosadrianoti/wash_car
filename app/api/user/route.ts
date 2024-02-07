@@ -19,5 +19,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  return NextResponse.json({ "result": "teste" });
+  const {sub, name, email} = await req.json();
+  const res = await fetch(`${process.env.BASE_URL}/api/user?sub=${sub}`)
+  const userData = await res.json()
+  return NextResponse.json({ "result": userData });
 }
