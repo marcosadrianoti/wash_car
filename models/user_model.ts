@@ -8,9 +8,8 @@ export const getUserBySubModel = async (sub: any): Promise<any> => {
         where: { sub: sub },
       }
     );
-    return NextResponse.json(userData);
+    return userData;
   } catch (error) {
-    return NextResponse.json({ error: 'Erro interno do servidor' });
+    return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }
-  // return {type: null | 'error', message: data, status: statusCode };
 }
