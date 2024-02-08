@@ -13,3 +13,20 @@ export const getUserBySubModel = async (sub: any): Promise<any> => {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }
 }
+
+export const addUserModel = async (sub: string, name: string, email: string): Promise<any> => {
+  try {
+    const result = await prisma.user.create(
+      {
+        data: {
+          sub,
+          name,
+          email,
+        }
+      }
+    );
+    return NextResponse.json({ message: result, status: 201 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Internal Server Error', status: 500 });
+  }
+}
