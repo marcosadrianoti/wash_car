@@ -1,6 +1,5 @@
 import { getUserBySubController, addUserController } from '@/controllers';
 import { NextResponse } from 'next/server';
-import { Result } from 'postcss';
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
