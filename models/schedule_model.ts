@@ -17,6 +17,6 @@ export const addScheduleModel = async (scheduleData: ScheduleData): Promise<any>
     });
     return newSchedule;
   } catch (error) {
-    return NextResponse.json({ message: error, status: 500 });
+    return { message: error, status: 500 };
   }
 }
