@@ -12,15 +12,15 @@ datasource db {
 
 model Schedule {
   id            Int        @id @default(autoincrement())
-  userId        String     @unique
+  userId        String
   user          User       @relation(fields: [userId], references: [id])
-  washTypeId    Int        @unique
+  washTypeId    Int
   washType      Whash_Type @relation(fields: [washTypeId], references: [id])
-  cityId        Int        @unique
+  cityId        Int
   city          City       @relation(fields: [cityId], references: [id])
   message       String?
   scheduledDate DateTime   @map(name: "sheduled_date")
-  payment       Boolean
+  payment       Boolean    @default(false)
   createdAt     DateTime   @default(now()) @map(name: "created_at")
   updatedAt     DateTime   @updatedAt @map(name: "updated_at")
 
@@ -28,34 +28,34 @@ model Schedule {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  sub       String    @unique
-  email     String    @unique
+  id        String     @id @default(cuid())
+  sub       String     @unique
+  email     String     @unique
   name      String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  Schedule  Schedule?
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Schedule  Schedule[]
 
   @@map(name: "users")
 }
 
 model Whash_Type {
-  id        Int       @id @default(autoincrement())
-  type      String    @unique
+  id        Int        @id @default(autoincrement())
+  type      String     @unique
   price     Float
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  Schedule  Schedule?
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Schedule  Schedule[]
 
   @@map(name: "wash_types")
 }
 
 model City {
-  id        Int       @id @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now()) @map(name: "created_at")
-  updatedAt DateTime  @updatedAt @map(name: "updated_at")
-  Schedule  Schedule?
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  createdAt DateTime   @default(now()) @map(name: "created_at")
+  updatedAt DateTime   @updatedAt @map(name: "updated_at")
+  Schedule  Schedule[]
 
   @@map(name: "cities")
 }

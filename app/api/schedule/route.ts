@@ -1,4 +1,6 @@
+import { addScheduleController } from "@/controllers";
 import { NextResponse } from "next/server";
+import { ScheduleData } from "@/interfaces";
 
 export async function POST(req: Request) {
   const {
@@ -9,15 +11,15 @@ export async function POST(req: Request) {
     scheduledDate,
     payment
   } = await req.json();
-  const schedulingData = {
-    userId,
-    washTypeId,
-    cityId,
-    message,
-    scheduledDate,
-    payment
-  }
   try {
+    const schedulingData: ScheduleData = {
+      userId,
+      washTypeId,
+      cityId,
+      message,
+      scheduledDate,
+      payment
+    }
     const res = await addScheduleController(schedulingData)
     const scheduleData = await res.json();
     return NextResponse.json(scheduleData);
