@@ -14,11 +14,15 @@ export const getUserBySubService = async (sub: any): Promise<any> => {
 }
 
 export const addUserService = async (sub: string, name: string, email: string): Promise<any> => {
+  const res = await fetch(`${process.env.BASE_URL}/api/user?sub=${sub}`)
+  const userData = await res.json()
+  const { status } = userData;
+  if (status == 200) {
+    return { message: 'User already exists in the database', status: 422 };
+  }
   try {
     const res = await addUserModel(sub, name, email);
-    const userData = await res.json();
-    const { message, status } = userData;
-    return { message, status };
+    return { message: res, status: 201 };
   } catch (error) {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }

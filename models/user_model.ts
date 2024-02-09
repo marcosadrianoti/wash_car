@@ -25,7 +25,7 @@ export const addUserModel = async (sub: string, name: string, email: string): Pr
         }
       }
     );
-    return NextResponse.json({ message: result, status: 201 });
+    return result;
   } catch (error) {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }

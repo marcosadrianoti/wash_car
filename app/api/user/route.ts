@@ -20,12 +20,6 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   const {sub, name, email} = await req.json();
-  const res = await fetch(`${process.env.BASE_URL}/api/user?sub=${sub}`)
-  const userData = await res.json()
-  const { status } = userData;
-  if (status == 200) {
-    return NextResponse.json({ message: 'User already exists in the database', status: 422});
-  }
   try {
     const res = await addUserController(sub, name, email);
     const userData = await res.json()

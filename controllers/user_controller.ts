@@ -8,7 +8,7 @@ export const getUserBySubController = async (req: Request, sub: any): Promise<an
   } catch (error) {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }
-};
+}
 
 export const addUserController = async (sub: string, name: string, email: string): Promise<any> => {
   try {
@@ -17,4 +17,4 @@ export const addUserController = async (sub: string, name: string, email: string
   } catch (error) {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }
-};
+}
