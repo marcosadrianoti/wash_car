@@ -5,8 +5,6 @@ import { NextResponse } from "next/server";
 export const addScheduleService = async (scheduleData: ScheduleData): Promise<any> => {
   try {
     const res = await addScheduleModel(scheduleData);
-    console.log('res ===>', res);
-
     if (res.status == 500) {
       return { message: res.message, status: 500 };
     }
