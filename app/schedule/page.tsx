@@ -2,26 +2,32 @@
 
 import React, { useEffect, useState } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
-import WashType from '@/components/WashType';
+import WashTypeComponent from '@/components/WashType';
+import { WashType } from '@/interfaces';
 
 export default function Schedule() {
-  const [values, setValues] = useState({
+  const [currentWashType, setCurrentWashType] = useState({
     washTypeId: 0,
   });
+  const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const { user } = useUser();
+
   const handleWashTypeChange = (valueType: number): void => {
-    setValues({...values, washTypeId: valueType});
+    setCurrentWashType({ ...currentWashType, washTypeId: valueType });
+
   };
+  console.log(washTypes);
 
   useEffect(() => {
     async function fetchWashTypes() {
       try {
-        const response = await fetch(`/api/wash-types`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data); // Aqui você pode manipular os dados como necessário
+        const res = await fetch(`/api/wash-types`);
+        if (res.ok) {
+          const responseData = await res.json();
+          const allWashTypes: WashType[] = responseData.message;
+          setWashTypes(allWashTypes);
         } else {
-          throw new Error('Erro ao buscar tipos de lavagem');
+          throw new Error('Error when searching for wash types');
         }
       } catch (error) {
         console.error(error);
@@ -30,44 +36,26 @@ export default function Schedule() {
 
     fetchWashTypes();
   }, []);
-  
-        
-        
 
   return (
     <div>
-      <span>{user?.name} entrou.</span>
+      <span>{user?.nickname} entrou.</span>
       <div className='flex gap-4 p-4'>
-        <WashType 
-          svgImage='/images/tunnel_wash.svg'
-          buttonText='Tunnel Wash'
-          valueType={1}
-          onClick={handleWashTypeChange}
-          isSelected={values.washTypeId === 1}
-        />
-        <WashType
-          svgImage='/images/self_wash.svg'
-          buttonText='Self Wash'
-          valueType={2}
-          onClick={handleWashTypeChange}
-          isSelected={values.washTypeId === 2}
-        />
-        <WashType
-          svgImage='/images/chemical_wash.svg'
-          buttonText='Chemical Wash'
-          valueType={3}
-          onClick={handleWashTypeChange}
-          isSelected={values.washTypeId === 3}
-        />
-        <WashType
-          svgImage='/images/hand_wash.svg'
-          buttonText='Hand Wash'
-          valueType={4}
-          onClick={handleWashTypeChange}
-          isSelected={values.washTypeId === 4}
-        />
+        {washTypes.map(washType => (
+          <WashTypeComponent
+            key={washType.id}
+            svgImage={`/images/${washType.type.toLowerCase().replace(' ', '_')}.svg`}
+            buttonText={washType.type}
+            valueType={washType.id}
+            onClick={handleWashTypeChange}
+            isSelected={currentWashType.washTypeId === washType.id}
+          />
+        ))}
       </div>
+      <select>
+        <option value="someOption">Some option</option>
+        <option value="otherOption">Other option</option>
+      </select>
     </div>
   );
 }
-
