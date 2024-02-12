@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashType from '@/components/WashType';
 
@@ -11,8 +11,28 @@ export default function Schedule() {
   const { user } = useUser();
   const handleWashTypeChange = (valueType: number): void => {
     setValues({...values, washTypeId: valueType});
-    console.log('washTypeId', valueType);
   };
+
+  useEffect(() => {
+    async function fetchWashTypes() {
+      try {
+        const response = await fetch(`/api/wash-types`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data); // Aqui você pode manipular os dados como necessário
+        } else {
+          throw new Error('Erro ao buscar tipos de lavagem');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchWashTypes();
+  }, []);
+  
+        
+        
 
   return (
     <div>
@@ -50,3 +70,4 @@ export default function Schedule() {
     </div>
   );
 }
+
