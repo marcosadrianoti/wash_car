@@ -3,17 +3,19 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
-import { WashType } from '@/interfaces';
+import { WashType, City } from '@/interfaces';
 
 export default function Schedule() {
-  const [newWashType, setNewWashType] = useState({
+  const [newSchedule, setNewSchedule] = useState({
     washTypeId: 0,
+    cityId: 0,
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const { user } = useUser();
 
   const handleWashTypeChange = (valueType: number): void => {
-    setNewWashType({ ...newWashType, washTypeId: valueType });
+    setNewSchedule({ ...newSchedule, washTypeId: valueType });
 
   };
 
@@ -36,6 +38,26 @@ export default function Schedule() {
     fetchWashTypes();
   }, []);
 
+  useEffect(() => {
+    async function fetchCities() {
+      try {
+        const res = await fetch(`/api/cities`);
+        if (res.ok) {
+          const responseData = await res.json();
+          const allCities: City[] = responseData.message;
+          setCities(allCities);
+        } else {
+          throw new Error('Error when searching for cities');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      
+    }
+    
+    fetchCities();
+  }, []);
+
   return (
     <div>
       <span>{user?.nickname} entrou.</span>
@@ -47,7 +69,7 @@ export default function Schedule() {
             buttonText={washType.type}
             valueType={washType.id}
             onClick={handleWashTypeChange}
-            isSelected={newWashType.washTypeId === washType.id}
+            isSelected={newSchedule.washTypeId === washType.id}
           />
         ))}
       </div>
