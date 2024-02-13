@@ -64,7 +64,7 @@ export default function Schedule() {
 
     fetchCities();
   }, []);
-  console.log('value====>', newSchedule);
+  
   return (
     <div>
       <span>{user?.nickname} entrou.</span>
