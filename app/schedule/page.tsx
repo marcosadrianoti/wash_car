@@ -16,7 +16,13 @@ export default function Schedule() {
 
   const handleWashTypeChange = (valueType: number): void => {
     setNewSchedule({ ...newSchedule, washTypeId: valueType });
+  };
 
+  const handleCityChange = (event: { target: { value: string; }; }) => {
+    const idCity = parseInt(event.target.value);
+    if (!Number.isNaN(idCity)) { 
+    console.log('value====>', idCity);
+    }
   };
 
   useEffect(() => {
@@ -52,9 +58,9 @@ export default function Schedule() {
       } catch (error) {
         console.error(error);
       }
-      
+
     }
-    
+
     fetchCities();
   }, []);
 
@@ -73,10 +79,16 @@ export default function Schedule() {
           />
         ))}
       </div>
-      <select>
-        <option value="someOption">Some option</option>
-        <option value="otherOption">Other option</option>
-      </select>
+
+      <label className="flex flex-col">
+        Select a City
+        <select onChange={handleCityChange} className="text-blue-900 w-1/2">
+        <option key='' value=''></option>
+          {cities.map(city => (
+            <option key={city.id} value={city.id}>{city.name}</option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }
