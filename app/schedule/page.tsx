@@ -20,8 +20,9 @@ export default function Schedule() {
 
   const handleCityChange = (event: { target: { value: string; }; }) => {
     const idCity = parseInt(event.target.value);
-    if (!Number.isNaN(idCity)) { 
-    console.log('value====>', idCity);
+    if (!Number.isNaN(idCity)) {
+      setNewSchedule({...newSchedule, cityId: idCity});
+      
     }
   };
 
@@ -63,7 +64,7 @@ export default function Schedule() {
 
     fetchCities();
   }, []);
-
+  console.log('value====>', newSchedule);
   return (
     <div>
       <span>{user?.nickname} entrou.</span>
@@ -83,7 +84,7 @@ export default function Schedule() {
       <label className="flex flex-col">
         Select a City
         <select onChange={handleCityChange} className="text-blue-900 w-1/2">
-        <option key='' value=''></option>
+          <option key='' value=''></option>
           {cities.map(city => (
             <option key={city.id} value={city.id}>{city.name}</option>
           ))}
