@@ -6,17 +6,16 @@ import WashTypeComponent from '@/components/WashType';
 import { WashType } from '@/interfaces';
 
 export default function Schedule() {
-  const [currentWashType, setCurrentWashType] = useState({
+  const [newWashType, setNewWashType] = useState({
     washTypeId: 0,
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const { user } = useUser();
 
   const handleWashTypeChange = (valueType: number): void => {
-    setCurrentWashType({ ...currentWashType, washTypeId: valueType });
+    setNewWashType({ ...newWashType, washTypeId: valueType });
 
   };
-  console.log(washTypes);
 
   useEffect(() => {
     async function fetchWashTypes() {
@@ -48,7 +47,7 @@ export default function Schedule() {
             buttonText={washType.type}
             valueType={washType.id}
             onClick={handleWashTypeChange}
-            isSelected={currentWashType.washTypeId === washType.id}
+            isSelected={newWashType.washTypeId === washType.id}
           />
         ))}
       </div>
