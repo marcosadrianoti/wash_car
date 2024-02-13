@@ -1,17 +1,25 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
 import { WashType, City } from '@/interfaces';
 
 export default function Schedule() {
   const [newSchedule, setNewSchedule] = useState({
+    userId: "cls9g3sy000006nianvw3obq7",
     washTypeId: 0,
     cityId: 0,
+    message: "Apenas um testeeeee",
+    scheduledDate: "2024-02-10T08:00:00Z",
+    payment: false
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [selectedDate, setselectedDate] = useState<string | null>(null);
+
   const { user } = useUser();
 
   const handleWashTypeChange = (valueType: number): void => {
@@ -21,8 +29,8 @@ export default function Schedule() {
   const handleCityChange = (event: { target: { value: string; }; }) => {
     const idCity = parseInt(event.target.value);
     if (!Number.isNaN(idCity)) {
-      setNewSchedule({...newSchedule, cityId: idCity});
-      
+      setNewSchedule({ ...newSchedule, cityId: idCity });
+
     }
   };
 
@@ -64,7 +72,10 @@ export default function Schedule() {
 
     fetchCities();
   }, []);
-  
+
+  console.log(newSchedule);
+
+
   return (
     <div>
       <span>{user?.nickname} entrou.</span>
@@ -90,6 +101,21 @@ export default function Schedule() {
           ))}
         </select>
       </label>
+
+      <DatePicker
+        selected={selectedDate ? new Date(selectedDate) : null}
+        onChange={date => {
+          if (date) {
+            const formattedDate = date.toISOString(); // Converte a data para o formato ISO 8601
+            setselectedDate(formattedDate);
+          }
+        }}
+        showTimeSelect
+        dateFormat="dd/MM/yyyy"
+        className="text-blue-900 w-1/2"
+        id="washDate"
+        placeholderText="Choose a date"
+      />
     </div>
   );
 }
