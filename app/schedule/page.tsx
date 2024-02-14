@@ -26,11 +26,9 @@ export default function Schedule() {
   };
 
   const handleCityChange = (event: { target: { value: string; }; }) => {
-    const idCity = parseInt(event.target.value);
-    if (!Number.isNaN(idCity)) {
-      setNewSchedule({ ...newSchedule, cityId: idCity });
-
-    }
+    const valueId = parseInt(event.target.value);
+    const cityId = Number.isNaN(valueId) ? 0 : valueId;
+    setNewSchedule({ ...newSchedule, cityId });
   };
 
   const handleDateChange = (date: Date | null) => {
@@ -41,7 +39,8 @@ export default function Schedule() {
   }
 
   const handleMessageChange = (event: { target: { value: string; }; }) => {
-    setNewSchedule({ ...newSchedule, message: event.target.value })
+    const message = event.target.value
+    setNewSchedule({ ...newSchedule, message })
   }
 
   useEffect(() => {
@@ -106,10 +105,13 @@ export default function Schedule() {
         Select a City
         <select onChange={handleCityChange} className="text-blue-900 w-1/2">
           <option key='' value=''></option>
-          {cities.map(city => (
-            <option key={city.id} value={city.id}>{city.name}</option>
-          ))}
+          {cities
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(city => (
+              <option key={city.id} value={city.id}>{city.name}</option>
+            ))}
         </select>
+
       </label>
       <DatePicker
         selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
