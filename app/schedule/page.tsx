@@ -18,7 +18,6 @@ export default function Schedule() {
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const { user } = useUser();
 
@@ -37,9 +36,12 @@ export default function Schedule() {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const formattedDate = date.toISOString(); // Converte a data para o formato ISO 8601
-      // setSelectedDate(formattedDate);
       setNewSchedule({ ...newSchedule, scheduledDate: formattedDate })
     }
+  }
+
+  const handleMessageChange = (event: { target: { value: string; }; }) => {
+    setNewSchedule({ ...newSchedule, message: event.target.value })
   }
 
   useEffect(() => {
@@ -109,7 +111,6 @@ export default function Schedule() {
           ))}
         </select>
       </label>
-
       <DatePicker
         selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
         onChange={(date) => handleDateChange(date)}
@@ -119,6 +120,14 @@ export default function Schedule() {
         id="washDate"
         placeholderText="Choose a date and time"
       />
+      <label className="flex flex-col">
+        Additional message
+        <textarea
+          className="text-blue-900 w-1/2"
+          value={newSchedule.message}
+          onChange={handleMessageChange}
+        />
+      </label>
       <button onClick={() => console.log(newSchedule)} className=
         "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
