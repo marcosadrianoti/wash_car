@@ -10,11 +10,12 @@ type WashTypeProps = {
 };
 
 const WashType: React.FC<WashTypeProps> = ({ buttonText, svgImage, valueType, onClick, isSelected }) => {
+  
   return (
     <button
       type="button"
       value={valueType}
-      className={`flex flex-col h-40 w-40 items-center justify-center rounded-full p-5 bg-slate-300 hover:${isSelected ? '' : 'bg-slate-400'} ${isSelected ? 'bg-blue-300' : ''}`}
+      className={`flex flex-col h-40 w-40 items-center justify-center rounded-full p-5 bg-slate-300 hover:${isSelected ? '' : 'bg-slate-400'} ${isSelected ? 'bg-blue-400' : ''}`}
       onClick={() => onClick(valueType)}
     >
       <Image
