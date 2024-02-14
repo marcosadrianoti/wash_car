@@ -13,12 +13,12 @@ export default function Schedule() {
     washTypeId: 0,
     cityId: 0,
     message: "Apenas um testeeeee",
-    scheduledDate: "2024-02-10T08:00:00Z",
+    scheduledDate: "",
     payment: false
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const [cities, setCities] = useState<City[]>([]);
-  const [selectedDate, setselectedDate] = useState<string | null>(null);
+  // const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const { user } = useUser();
 
@@ -33,6 +33,14 @@ export default function Schedule() {
 
     }
   };
+
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      const formattedDate = date.toISOString(); // Converte a data para o formato ISO 8601
+      // setSelectedDate(formattedDate);
+      setNewSchedule({ ...newSchedule, scheduledDate: formattedDate })
+    }
+  }
 
   useEffect(() => {
     async function fetchWashTypes() {
@@ -73,7 +81,7 @@ export default function Schedule() {
     fetchCities();
   }, []);
 
-  console.log(newSchedule);
+
 
 
   return (
@@ -103,19 +111,19 @@ export default function Schedule() {
       </label>
 
       <DatePicker
-        selected={selectedDate ? new Date(selectedDate) : null}
-        onChange={date => {
-          if (date) {
-            const formattedDate = date.toISOString(); // Converte a data para o formato ISO 8601
-            setselectedDate(formattedDate);
-          }
-        }}
+        selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
+        onChange={(date) => handleDateChange(date)}
         showTimeSelect
-        dateFormat="dd/MM/yyyy"
-        className="text-blue-900 w-1/2"
+        dateFormat="dd/MM/yyyy hh:mm aa"
+        className="w-3/4 text-blue-900"
         id="washDate"
-        placeholderText="Choose a date"
+        placeholderText="Choose a date and time"
       />
+      <button onClick={() => console.log(newSchedule)} className=
+        "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Agendar
+      </button>
     </div>
   );
 }

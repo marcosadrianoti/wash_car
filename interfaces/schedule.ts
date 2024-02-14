@@ -3,7 +3,7 @@ export interface ScheduleData {
     washTypeId: number;
     cityId: number;
     message?: string;
-    scheduledDate: Date;
+    scheduledDate: Date | string;
     payment: boolean;
   }
   
