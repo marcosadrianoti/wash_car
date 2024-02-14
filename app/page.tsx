@@ -17,12 +17,11 @@ export default async function Home() {
           body: JSON.stringify({sub, name, email})
         }
       );
-
     } catch (error){
       console.error(error);
     }
 
-    redirect(`/schedule`);
+    redirect(`/schedule?sub=${sub}`);
   }
     
   return (

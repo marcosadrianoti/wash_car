@@ -1,15 +1,18 @@
 'use client'
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
 import { WashType, City } from '@/interfaces';
 
-export default function Schedule() {
+export default function Schedule(req: Request) {
+  const searchParams = useSearchParams()
+  
   const [newSchedule, setNewSchedule] = useState({
-    userId: "cls9g3sy000006nianvw3obq7",
+    userId: "",
     washTypeId: 0,
     cityId: 0,
     message: "Apenas um testeeeee",
@@ -19,7 +22,9 @@ export default function Schedule() {
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const [cities, setCities] = useState<City[]>([]);
 
-  const { user } = useUser();
+  const sub = searchParams.get('sub')
+  const user = useUser().user;
+  // console.log('sub', sub, user?.name);
 
   const handleWashTypeChange = (valueType: number): void => {
     setNewSchedule({ ...newSchedule, washTypeId: valueType });
@@ -42,6 +47,26 @@ export default function Schedule() {
     const message = event.target.value
     setNewSchedule({ ...newSchedule, message })
   }
+
+  useEffect(() => {
+
+    async function fetchUser() {
+      try {
+        const res = await fetch(`/api/user?sub=${sub}`);
+        const responseData = await res.json();
+        if (responseData.status === 200) {
+          const userId = responseData.message.id;
+          setNewSchedule(prevSchedule => ({ ...prevSchedule, userId }));
+        } else {
+          throw new Error('Error when searching for user');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+    }
+      fetchUser();
+  }, [sub]);
 
   useEffect(() => {
     async function fetchWashTypes() {
@@ -87,7 +112,8 @@ export default function Schedule() {
 
   return (
     <div>
-      <span>{user?.nickname} entrou.</span>
+      <span>Name: {user?.name}</span><br/>
+      <span>Email: {user?.email}</span>
       <div className='flex gap-4 p-4'>
         {washTypes.map(washType => (
           <WashTypeComponent
