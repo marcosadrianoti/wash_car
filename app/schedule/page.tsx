@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
-import { WashType, City } from '@/interfaces';
+import { WashType, City, ScheduleData } from '@/interfaces';
 
 export default function Schedule(req: Request) {
   const searchParams = useSearchParams()
@@ -15,7 +15,7 @@ export default function Schedule(req: Request) {
     userId: "",
     washTypeId: 0,
     cityId: 0,
-    message: "Apenas um testeeeee",
+    message: "",
     scheduledDate: "",
     payment: false
   });
@@ -24,7 +24,6 @@ export default function Schedule(req: Request) {
 
   const sub = searchParams.get('sub')
   const user = useUser().user;
-  // console.log('sub', sub, user?.name);
 
   const handleWashTypeChange = (valueType: number): void => {
     setNewSchedule({ ...newSchedule, washTypeId: valueType });
@@ -48,8 +47,22 @@ export default function Schedule(req: Request) {
     setNewSchedule({ ...newSchedule, message })
   }
 
-  useEffect(() => {
+  const saveNewSchedule = async (newSchedule: ScheduleData) => {
+    try{
+      const res = await fetch(
+        `/api/schedule`,
+        {
+          method: 'POST', 
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(newSchedule)
+        }
+      );
+    } catch (error){
+      console.error(error);
+    }
+  }
 
+  useEffect(() => {
     async function fetchUser() {
       try {
         const res = await fetch(`/api/user?sub=${sub}`);
@@ -63,8 +76,8 @@ export default function Schedule(req: Request) {
       } catch (error) {
         console.error(error);
       }
-
     }
+
       fetchUser();
   }, [sub]);
 
@@ -101,14 +114,10 @@ export default function Schedule(req: Request) {
       } catch (error) {
         console.error(error);
       }
-
     }
 
     fetchCities();
   }, []);
-
-
-
 
   return (
     <div>
@@ -156,7 +165,7 @@ export default function Schedule(req: Request) {
           onChange={handleMessageChange}
         />
       </label>
-      <button onClick={() => console.log(newSchedule)} className=
+      <button type="button" onClick={() => saveNewSchedule(newSchedule)} className=
         "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Agendar
