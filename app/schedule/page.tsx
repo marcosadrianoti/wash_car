@@ -21,24 +21,30 @@ export default function Schedule(req: Request) {
   });
   const [washTypes, setWashTypes] = useState<WashType[]>([]);
   const [cities, setCities] = useState<City[]>([]);
+  const [washTypeIdError, setWashTypeIdError] = useState(null);
+  const [cityIdError, setCityIdError] = useState(null);
+  const [scheduledDateError, setScheduledDateError] = useState('');
 
-  const sub = searchParams.get('sub')
+  const sub = searchParams.get('sub') || '';
   const user = useUser().user;
 
   const handleWashTypeChange = (valueType: number): void => {
     setNewSchedule({ ...newSchedule, washTypeId: valueType });
+    setWashTypeIdError(null);
   };
 
   const handleCityChange = (event: { target: { value: string; }; }) => {
     const valueId = parseInt(event.target.value);
     const cityId = Number.isNaN(valueId) ? 0 : valueId;
     setNewSchedule({ ...newSchedule, cityId });
+    setCityIdError(null);
   };
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const formattedDate = date.toISOString(); // Converte a data para o formato ISO 8601
       setNewSchedule({ ...newSchedule, scheduledDate: formattedDate })
+      setScheduledDateError('');
     }
   }
 
@@ -47,8 +53,31 @@ export default function Schedule(req: Request) {
     setNewSchedule({ ...newSchedule, message })
   }
 
+
+  const handleErrors = (errors: any[]) => {
+    errors.forEach(error => {
+      const key = Object.keys(error)[0];
+      const errorMessage = error[key];
+
+      switch (key) {
+        case 'washTypeIdError':
+          setWashTypeIdError(errorMessage);
+          break;
+        case 'cityIdError':
+          setCityIdError(errorMessage);
+          break;
+        case 'scheduledDateError':
+          setScheduledDateError(errorMessage);
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
   const handleSubmit = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
+
     try {
       const res = await fetch(
         `/api/schedule`,
@@ -58,6 +87,19 @@ export default function Schedule(req: Request) {
           body: JSON.stringify(newSchedule)
         }
       );
+      const { message, status } = await res.json();
+      if (status === 400) {
+        handleErrors(message);
+      } else if (status === 201) {
+        setNewSchedule(prevSchedule => ({
+          ...prevSchedule,
+          washTypeId: 0,
+          cityId: 0,
+          message: "",
+          scheduledDate: "",
+          payment: false
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +166,7 @@ export default function Schedule(req: Request) {
     <div>
       <span>Name: {user?.name}</span><br />
       <span>Email: {user?.email}</span>
-      <form onSubmit={handleSubmit}>
+      <form id="formSchedule" onSubmit={handleSubmit}>
         <div className='flex gap-4 p-4'>
           {washTypes.map(washType => (
             <WashTypeComponent
@@ -136,19 +178,24 @@ export default function Schedule(req: Request) {
               isSelected={newSchedule.washTypeId === washType.id}
             />
           ))}
+        <p id="washTypeIdError" className="text-red-500">{washTypeIdError}</p>
         </div>
 
         <label className="flex flex-col">
           Select a City
-          <select onChange={handleCityChange} className="text-blue-900 w-1/2">
-            <option key='' value=''></option>
+          <select
+            name="cityId"
+            onChange={handleCityChange}
+            value={newSchedule.cityId}
+            className="text-blue-900 w-1/2">
+            <option defaultValue={0}></option>
             {cities
               .sort((a, b) => a.name.localeCompare(b.name))
               .map(city => (
                 <option key={city.id} value={city.id}>{city.name}</option>
               ))}
           </select>
-
+          <p id="cityIdError" className="text-red-500">{cityIdError}</p>
         </label>
         <DatePicker
           selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
@@ -159,9 +206,11 @@ export default function Schedule(req: Request) {
           id="washDate"
           placeholderText="Choose a date and time"
         />
+        <span id="scheduledDateError" className="text-red-500">{scheduledDateError}</span>
         <label className="flex flex-col">
           Additional message
           <textarea
+            id="messageWash"
             className="text-blue-900 w-1/2"
             value={newSchedule.message}
             onChange={handleMessageChange}
