@@ -6,11 +6,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
-import { WashType, City, ScheduleData } from '@/interfaces';
+import { WashType, City } from '@/interfaces';
 
 export default function Schedule(req: Request) {
   const searchParams = useSearchParams()
-  
+
   const [newSchedule, setNewSchedule] = useState({
     userId: "",
     washTypeId: 0,
@@ -47,17 +47,18 @@ export default function Schedule(req: Request) {
     setNewSchedule({ ...newSchedule, message })
   }
 
-  const saveNewSchedule = async (newSchedule: ScheduleData) => {
-    try{
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    try {
       const res = await fetch(
         `/api/schedule`,
         {
-          method: 'POST', 
-          headers: {'Content-Type': 'application/json'},
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newSchedule)
         }
       );
-    } catch (error){
+    } catch (error) {
       console.error(error);
     }
   }
@@ -78,7 +79,7 @@ export default function Schedule(req: Request) {
       }
     }
 
-      fetchUser();
+    fetchUser();
   }, [sub]);
 
   useEffect(() => {
@@ -121,55 +122,58 @@ export default function Schedule(req: Request) {
 
   return (
     <div>
-      <span>Name: {user?.name}</span><br/>
+      <span>Name: {user?.name}</span><br />
       <span>Email: {user?.email}</span>
-      <div className='flex gap-4 p-4'>
-        {washTypes.map(washType => (
-          <WashTypeComponent
-            key={washType.id}
-            svgImage={`/images/${washType.type.toLowerCase().replace(' ', '_')}.svg`}
-            buttonText={washType.type}
-            valueType={washType.id}
-            onClick={handleWashTypeChange}
-            isSelected={newSchedule.washTypeId === washType.id}
-          />
-        ))}
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div className='flex gap-4 p-4'>
+          {washTypes.map(washType => (
+            <WashTypeComponent
+              key={washType.id}
+              svgImage={`/images/${washType.type.toLowerCase().replace(' ', '_')}.svg`}
+              buttonText={washType.type}
+              valueType={washType.id}
+              onClick={handleWashTypeChange}
+              isSelected={newSchedule.washTypeId === washType.id}
+            />
+          ))}
+        </div>
 
-      <label className="flex flex-col">
-        Select a City
-        <select onChange={handleCityChange} className="text-blue-900 w-1/2">
-          <option key='' value=''></option>
-          {cities
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map(city => (
-              <option key={city.id} value={city.id}>{city.name}</option>
-            ))}
-        </select>
+        <label className="flex flex-col">
+          Select a City
+          <select onChange={handleCityChange} className="text-blue-900 w-1/2">
+            <option key='' value=''></option>
+            {cities
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map(city => (
+                <option key={city.id} value={city.id}>{city.name}</option>
+              ))}
+          </select>
 
-      </label>
-      <DatePicker
-        selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
-        onChange={(date) => handleDateChange(date)}
-        showTimeSelect
-        dateFormat="dd/MM/yyyy hh:mm aa"
-        className="w-3/4 text-blue-900"
-        id="washDate"
-        placeholderText="Choose a date and time"
-      />
-      <label className="flex flex-col">
-        Additional message
-        <textarea
-          className="text-blue-900 w-1/2"
-          value={newSchedule.message}
-          onChange={handleMessageChange}
+        </label>
+        <DatePicker
+          selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
+          onChange={(date) => handleDateChange(date)}
+          showTimeSelect
+          dateFormat="dd/MM/yyyy hh:mm aa"
+          className="w-3/4 text-blue-900"
+          id="washDate"
+          placeholderText="Choose a date and time"
         />
-      </label>
-      <button type="button" onClick={() => saveNewSchedule(newSchedule)} className=
-        "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Agendar
-      </button>
+        <label className="flex flex-col">
+          Additional message
+          <textarea
+            className="text-blue-900 w-1/2"
+            value={newSchedule.message}
+            onChange={handleMessageChange}
+          />
+        </label>
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Schedule
+        </button>
+      </form>
     </div>
   );
 }
