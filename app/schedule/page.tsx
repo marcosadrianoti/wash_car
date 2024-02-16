@@ -206,7 +206,7 @@ export default function Schedule(req: Request) {
           id="washDate"
           placeholderText="Choose a date and time"
         />
-        <span id="scheduledDateError" className="text-red-500">{scheduledDateError}</span>
+        <p id="scheduledDateError" className="text-red-500">{scheduledDateError}</p>
         <label className="flex flex-col">
           Additional message
           <textarea
