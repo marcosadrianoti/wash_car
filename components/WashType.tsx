@@ -10,27 +10,30 @@ type WashTypeProps = {
 };
 
 const WashType: React.FC<WashTypeProps> = ({ buttonText, svgImage, valueType, onClick, isSelected }) => {
-  
+
   return (
-    <button
-      type="button"
-      value={valueType}
-      className={`flex flex-col h-40 w-40 items-center justify-center rounded-full p-5 bg-slate-300 hover:${isSelected ? '' : 'bg-slate-400'} ${isSelected ? 'bg-blue-400' : ''}`}
-      onClick={() => onClick(valueType)}
-    >
-      <Image
-        src={svgImage}
-        alt="Icon"
-        priority={true}
-        width={100}
-        height={100}
-        className='w-auto h-auto'
-      />
+    <div className='flex flex-col items-center gap-3'>
+      <button
+        type="button"
+        value={valueType}
+        className={`flex flex-col h-40 w-40 items-center justify-center shadow-xl rounded-full p-5 bg-blue-100 ${isSelected ? 'bg-sky-600' : ''} ${isSelected ? '' : 'hover:bg-blue-400'}`}
+        onClick={() => onClick(valueType)}
+      >
+        <Image
+          src={svgImage}
+          alt="Icon"
+          priority={true}
+          width={100}
+          height={100}
+          className='w-auto h-auto'
+        />
+      </button>
       <span
-        className={`text-slate-800 ${isSelected ? 'text-white' : ''}`}>
+        className={`${isSelected ? 'text-xl font-medium text-blue-900' : ''}`}
+      >
         {buttonText}
       </span>
-    </button>
+    </div>
   );
 };
 
