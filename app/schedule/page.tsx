@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
 import { WashType, City } from '@/interfaces';
+import { GrFormSchedule } from "react-icons/gr";
 
 export default function Schedule(req: Request) {
   const searchParams = useSearchParams()
@@ -241,8 +242,9 @@ export default function Schedule(req: Request) {
           <div className="flex justify-center m-5">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-xl"
+              className="flex gap-2 items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-xl"
             >
+              <GrFormSchedule/>
               Schedule
             </button>
           </div>
