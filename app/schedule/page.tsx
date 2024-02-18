@@ -7,7 +7,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import WashTypeComponent from '@/components/WashType';
 import { WashType, City } from '@/interfaces';
-import { GrFormSchedule } from "react-icons/gr";
+import { MdCalendarMonth, MdEmail, MdLocationCity, MdMessage, MdOutlineSchedule, MdPersonPin } from "react-icons/md";
+import Logout from "@/components/Logout";
 
 export default function Schedule(req: Request) {
   const searchParams = useSearchParams()
@@ -165,10 +166,15 @@ export default function Schedule(req: Request) {
 
   return (
     <main className="flex min-h-screen justify-around items-center bg-slate-300">
+
       <div className="flex flex-col min-h-screen items-center mt-5 bg-slate-200 rounded-lg w-2/3">
-        <div className="flex flex-col items-center text-center m-2 text-blue-950 w-full">
-          <h1 className="text-3xl font-bold">Book a wash for your CAR</h1>
-          <h3 className="text-xl text-blue-900">Fully automated services with all cleaning options</h3>
+        <div className="flex flex-row justify-between w-full">
+          <div className="w-1/3"></div>
+          <div className="flex flex-col items-center text-center m-2 text-blue-950 w-full">
+            <h1 className="text-3xl font-bold">Book a wash for your CAR</h1>
+            <h3 className="text-xl text-blue-900">Fully automated services with all cleaning options</h3>
+          </div>
+          <Logout />
         </div>
         <form className="flex flex-col" id="formSchedule" onSubmit={handleSubmit}>
           <div className='flex gap-4 p-4'>
@@ -190,17 +196,28 @@ export default function Schedule(req: Request) {
             <div className="flex p-2 justify-items-start gap-10">
               {/* <span>Name: {user?.name}</span> */}
               <label className="w-1/2">
-                Name:
-                <p className="text-blue-900">{user?.name}</p>
+                <div className="flex gap-2 items-center">
+                  <MdPersonPin className="text-blue-900" />
+                  Name
+                </div>
+                <p className="flex gap-2 items-center text-blue-900">{user?.name}</p>
               </label>
               <label className="w-1/2">
-                Email:
-                <p className="text-blue-900">{user?.email}</p>
+                <div className="flex gap-2 items-center">
+                  <MdEmail className="text-blue-900" />
+                  Email
+                </div>
+
+                <p className="flex gap-2 items-center text-blue-900">{user?.email}</p>
               </label>
             </div>
             <div className="flex p-2 justify-items-start gap-10">
               <label className="flex flex-col w-1/2">
-                Select a City
+                <div className="flex gap-2 items-center">
+                  <MdLocationCity className="text-blue-900" />
+                  Select a City
+                </div>
+
                 <select
                   name="cityId"
                   onChange={handleCityChange}
@@ -216,7 +233,10 @@ export default function Schedule(req: Request) {
                 <p id="cityIdError" className="bg-red-100 text-red-500 px-5 text-center">{cityIdError}</p>
               </label>
               <label className="flex flex-col w-1/2">
-                Select a date and time
+                <div className="flex gap-2 items-center">
+                  <MdCalendarMonth className="text-blue-900" />
+                  Select a date and time
+                </div>
                 <DatePicker
                   selected={newSchedule.scheduledDate ? new Date(newSchedule.scheduledDate) : null}
                   onChange={(date) => handleDateChange(date)}
@@ -229,11 +249,14 @@ export default function Schedule(req: Request) {
                 <p id="scheduledDateError" className="bg-red-100 text-red-500 px-5 text-center">{scheduledDateError}</p>
               </label>
             </div>
-            <label className="flex flex-col">
-              Additional message
+            <label className="flex flex-col mt-2">
+              <div className="flex gap-2 items-center">
+                <MdMessage className="text-blue-900" />
+                Additional message
+              </div>
               <textarea
                 id="messageWash"
-                className="text-blue-900 caret-blue-900 rounded-md shadow-xl"
+                className="text-blue-900 caret-blue-900 p-1 rounded-md shadow-xl"
                 value={newSchedule.message}
                 onChange={handleMessageChange}
               />
@@ -244,7 +267,7 @@ export default function Schedule(req: Request) {
               type="submit"
               className="flex gap-2 items-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-xl"
             >
-              <GrFormSchedule/>
+              <MdOutlineSchedule />
               Schedule
             </button>
           </div>
