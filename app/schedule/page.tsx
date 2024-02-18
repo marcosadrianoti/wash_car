@@ -9,6 +9,7 @@ import WashTypeComponent from '@/components/WashType';
 import { WashType, City } from '@/interfaces';
 import { MdCalendarMonth, MdEmail, MdLocationCity, MdMessage, MdOutlineSchedule, MdPersonPin } from "react-icons/md";
 import Logout from "@/components/Logout";
+import Link from "next/link";
 
 export default function Schedule(req: Request) {
   const searchParams = useSearchParams()
@@ -174,6 +175,12 @@ export default function Schedule(req: Request) {
             <h1 className="text-3xl font-bold">Book a wash for your CAR</h1>
             <h3 className="text-xl text-blue-900">Fully automated services with all cleaning options</h3>
           </div>
+          <Link
+                className='flex gap-1 mt-3 mr-3 items-center justify-end text-blue-500 hover:text-blue-600'
+                href={`/schedules?userId=${newSchedule.userId}`}
+            >
+                My Schedules
+            </Link>
           <Logout />
         </div>
         <form className="flex flex-col" id="formSchedule" onSubmit={handleSubmit}>

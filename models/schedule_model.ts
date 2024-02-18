@@ -20,3 +20,38 @@ export const addScheduleModel = async (scheduleData: ScheduleData): Promise<any>
     return { message: error, status: 500 };
   }
 }
+
+// export const getAllSchedulesByUserIdModel = async (userId: string): Promise<any> => {
+//   try {
+//     const schedules = await prisma.schedule.findMany({
+//       where: {
+//         userId: userId
+//       }
+//     });
+//     return schedules;
+//   } catch (error) {
+//     return { message: error, status: 500 };
+//   }
+// }
+
+// import { PrismaClient } from '@prisma/client';
+
+// const prisma = new PrismaClient();
+
+export const getAllSchedulesByUserIdModel = async (userId: string): Promise<any> => {
+  try {
+    const schedules = await prisma.schedule.findMany({
+      where: {
+        userId: userId
+      },
+      include: {
+        washType: true,
+        user: true,
+        city: true
+      }
+    });
+    return schedules;
+  } catch (error) {
+    return { message: error, status: 500 };
+  }
+}

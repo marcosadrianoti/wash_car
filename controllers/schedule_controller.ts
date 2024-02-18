@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ScheduleData } from "@/interfaces"
-import { addScheduleService } from '@/services';
+import { addScheduleService, getAllSchedulesByUserIdService } from '@/services';
 import { z } from 'zod';
 
 const getErros = (erros: any[]) => {
@@ -30,6 +30,15 @@ export const addScheduleController = async (scheduleData: ScheduleData) => {
   try {
     const { message, status } = await addScheduleService(scheduleData);
     return NextResponse.json({ message, status });
+  } catch (error) {
+    return NextResponse.json({ message: 'Internal Server Error', status: 500 });
+  }
+}
+
+export const getAllSchedulesByUserIdController = async (userId: string) => {
+  try {
+    const res = await getAllSchedulesByUserIdService(userId);
+    return NextResponse.json(res);
   } catch (error) {
     return NextResponse.json({ message: 'Internal Server Error', status: 500 });
   }
