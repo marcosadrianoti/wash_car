@@ -48,7 +48,7 @@ export default function Schedules(req: Request) {
       try {
         const res = await fetch(`/api/schedule?userId=${userId}`);
         const schedules = await res.json();
-        console.log('schedules', schedules);
+        console.log('schedules', schedules.message[0]);
 
         // const schedules = await getAllSchedulesByUserIdController(userId); // Supondo que você tenha o userId definido em algum lugar
         setMySchedules(schedules.message);
@@ -73,7 +73,7 @@ export default function Schedules(req: Request) {
           <div className="flex flex-col">
             {mySchedules.map(schedule => (
               <div key={schedule.id}>
-                <h3>{schedule.washType?.name}</h3>
+                <h3>{schedule.washType?.type}</h3>
                 {/* <h3>{schedule.user.name}</h3>
               <h3>{schedule.city.name}</h3> */}
                 <h3>{schedule.message}</h3>

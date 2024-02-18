@@ -34,7 +34,7 @@ export interface Schedule {
 
 interface WashType {
   id: number;
-  name: string;
+  type: string;
   // Outras propriedades do tipo de lavagem, se houver
 }
 
