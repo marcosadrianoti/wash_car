@@ -29,12 +29,24 @@ export interface Schedule {
   payment: boolean;
   createdAt: string;
   updatedAt: string;
-  washType?: WashType; // Propriedade washType opcional do tipo WashType
+  washType?: WashType;
+  user?: User;
+  city?: City;
 }
 
 interface WashType {
   id: number;
   type: string;
-  // Outras propriedades do tipo de lavagem, se houver
+  price: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+}
+
+interface City {
+  id: number;
+  name: string;
 }
 
