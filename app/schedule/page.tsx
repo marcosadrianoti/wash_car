@@ -175,13 +175,16 @@ export default function Schedule(req: Request) {
             <h1 className="text-3xl font-bold">Book a wash for your CAR</h1>
             <h3 className="text-xl text-blue-900">Fully automated services with all cleaning options</h3>
           </div>
-          <Link
-                className='flex gap-1 mt-3 mr-3 items-center justify-end text-blue-500 hover:text-blue-600'
-                href={`/schedules?userId=${newSchedule.userId}`}
+          <div className='flex flex-row-reverse gap-2 mt-1 mr-3 justify-end items-start w-1/3 text-sm text-blue-500'>
+            
+            <Logout />
+            <Link
+              className='hover:text-blue-700'
+              href={`/schedules?userId=${newSchedule.userId}`}
             >
-                My Schedules
+              My Schedules
             </Link>
-          <Logout />
+          </div>
         </div>
         <form className="flex flex-col" id="formSchedule" onSubmit={handleSubmit}>
           <div className='flex gap-4 p-4'>

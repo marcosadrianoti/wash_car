@@ -6,8 +6,12 @@
 @tailwind utilities;
 
 
-h3 {
+h3, td {
   font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-family: 'Montserrat', sans-serif;
 }
 
 @layer utilities {
