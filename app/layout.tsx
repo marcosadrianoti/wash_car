@@ -18,7 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <UserProvider>
-        <body className={montserrat.className}>{children}</body>
+        <body className={montserrat.className}>
+          <main className="flex min-h-screen justify-around items-center bg-slate-300">
+            {children}
+          </main>
+        </body>
         {/* <body >{children}</body> */}
       </UserProvider>
     </html>

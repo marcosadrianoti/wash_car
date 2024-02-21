@@ -2,13 +2,15 @@
 
 import { Schedule } from "@/interfaces";
 import { useState, useEffect } from "react";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { MdDeleteForever, MdOutlinePayment } from "react-icons/md";
+import Link from 'next/link';
 
 export default function Schedules(req: Request) {
   const [mySchedules, setMySchedules] = useState<Schedule[]>([]);
   const searchParams = useSearchParams();
   const userId = searchParams.get('userId') || '';
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -61,7 +63,7 @@ export default function Schedules(req: Request) {
           location.href = url;
         })
         .catch((err) => console.log(err));
-  
+
 
       // if (res.ok) {
       //   // Atualizar o estado de mySchedules para refletir a alteração de pagamento
@@ -81,52 +83,61 @@ export default function Schedules(req: Request) {
   };
 
   return (
-    <main className="flex min-h-screen justify-around items-center bg-slate-300">
-      <div className="flex flex-col min-h-screen items-center mt-5 bg-slate-200 rounded-lg w-2/3">
-        <h1 className="text-xl text-blue-900">My Schedules</h1>
-        <table className="w-full">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="py-2 px-4">Wash Type</th>
-              <th className="py-2 px-4">City</th>
-              <th className="py-2 px-4">Message</th>
-              <th className="py-2 px-4">Price</th>
-              <th className="py-2 px-4">Scheduled Date</th>
-              <th className="py-2 px-4">Paid</th>
-              <th className="py-2 px-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mySchedules.map((schedule, index) => (
-              <tr key={schedule.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
-                <td className="py-2 px-4 text-xs">{schedule.washType?.type}</td>
-                <td className="py-2 px-4 text-xs">{schedule.city?.name}</td>
-                <td className="py-2 px-4 text-xs">{schedule.message}</td>
-                <td className="py-2 px-4 text-xs">{schedule.washType?.price}</td>
-                <td className="py-2 px-4 text-xs">{new Date(schedule.scheduledDate).toLocaleDateString()}{new Date(schedule.scheduledDate).getHours()}:{new Date(schedule.scheduledDate).getMinutes()}</td>
-                <td className="py-2 px-4 text-xs">{schedule.payment ? 'Yes' : 'No'}</td>
-                <td className="flex py-2 px-2 gap-1 text-xs">
-                  <button
-                    className="flex gap-1 items-center bg-red-500 text-white px-3 py-1 rounded"
-                    onClick={() => handleDelete(schedule.id)}
-                  >
-                    <MdDeleteForever />Delete
-                  </button>
-                  <button
-                    className="flex gap-1 items-center bg-green-500 text-white px-3 py-1 rounded"
-                    onClick={() => handlePay(schedule.id, schedule.washType?.type ?? '', schedule.washType?.price ?? 0)}
-                    disabled={schedule.payment}
-                  >
-                    <MdOutlinePayment />Pay
-                  </button>
+    <div className="flex flex-col min-h-screen items-center mt-5 bg-slate-200 rounded-lg w-2/3">
+      <div className="flex w-full">
+        <div className="w-1/3"></div>
+        <div className="w-1/3 flex justify-center">
+          <h1 className="text-xl text-blue-900 mt-3">My Schedules</h1>
+        </div>
+        <div className="w-1/3 flex justify-end">
+          <Link className="text-sm  text-blue-500 mt-3 mr-3 hover:text-blue-700" href="#" onClick={() => router.back()}>
+            Back
+          </Link>
+        </div>
 
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
-    </main>
+      <table className="w-full">
+        <thead className="text-blue-900 text-sm font-thin	">
+          <tr className="">
+            <th className="py-2 px-4">Wash Type</th>
+            <th className="py-2 px-4">City</th>
+            <th className="py-2 px-4">Message</th>
+            <th className="py-2 px-4">Price</th>
+            <th className="py-2 px-4">Scheduled Date</th>
+            <th className="py-2 px-4">Paid</th>
+            <th className="py-2 px-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {mySchedules.map((schedule, index) => (
+            <tr key={schedule.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}>
+              <td className="py-2 px-4 text-xs">{schedule.washType?.type}</td>
+              <td className="py-2 px-4 text-xs">{schedule.city?.name}</td>
+              <td className="py-2 px-4 text-xs">{schedule.message}</td>
+              <td className="py-2 px-4 text-xs">{schedule.washType?.price}</td>
+              <td className="py-2 px-4 text-xs">{new Date(schedule.scheduledDate).toLocaleDateString()}{new Date(schedule.scheduledDate).getHours()}:{new Date(schedule.scheduledDate).getMinutes()}</td>
+              <td className="py-2 px-4 text-xs">{schedule.payment ? 'Yes' : 'No'}</td>
+              <td className="flex py-2 px-2 gap-1 text-xs">
+                <button
+                  className="flex gap-1 items-center bg-red-500 text-white px-3 py-1 rounded"
+                  onClick={() => handleDelete(schedule.id)}
+                >
+                  <MdDeleteForever />Delete
+                </button>
+                <button
+                  className="flex gap-1 items-center bg-green-500 text-white px-3 py-1 rounded"
+                  onClick={() => handlePay(schedule.id, schedule.washType?.type ?? '', schedule.washType?.price ?? 0)}
+                  disabled={schedule.payment}
+                >
+                  <MdOutlinePayment />Pay
+                </button>
+
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
