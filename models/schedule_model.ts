@@ -21,6 +21,22 @@ export const addScheduleModel = async (scheduleData: ScheduleData): Promise<any>
   }
 }
 
+export const updatePaymentScheduleModel = async (scheduleId: number): Promise<any> => {
+  try {
+    const updatedSchedule = await prisma.schedule.update({
+      where: {
+        id: scheduleId
+      },
+      data: {
+        payment: true
+      }
+    });
+    return updatedSchedule;
+  } catch (error) {
+    return { message: error, status: 500 };
+  }
+}
+
 // export const getAllSchedulesByUserIdModel = async (userId: string): Promise<any> => {
 //   try {
 //     const schedules = await prisma.schedule.findMany({
@@ -33,10 +49,6 @@ export const addScheduleModel = async (scheduleData: ScheduleData): Promise<any>
 //     return { message: error, status: 500 };
 //   }
 // }
-
-// import { PrismaClient } from '@prisma/client';
-
-// const prisma = new PrismaClient();
 
 export const getAllSchedulesByUserIdModel = async (userId: string): Promise<any> => {
   try {

@@ -64,20 +64,6 @@ export default function Schedules(req: Request) {
           location.href = url;
         })
         .catch((err) => console.log(err));
-
-
-      // if (res.ok) {
-      //   // Atualizar o estado de mySchedules para refletir a alteração de pagamento
-      //   const updatedSchedules = mySchedules.map(schedule => {
-      //     if (schedule.id === id) {
-      //       return { ...schedule, payment: true };
-      //     }
-      //     return schedule;
-      //   });
-      //   setMySchedules(updatedSchedules);
-      // } else {
-      //   console.error('Erro ao processar pagamento:', res.statusText);
-      // }
     } catch (error) {
       console.error('Erro ao processar pagamento:', error);
     }
@@ -120,13 +106,13 @@ export default function Schedules(req: Request) {
               <td className="py-2 px-4 text-xs">{schedule.payment ? 'Yes' : 'No'}</td>
               <td className="flex py-2 px-2 gap-1 text-xs">
                 <button
-                  className="flex gap-1 items-center bg-red-500 text-white px-3 py-1 rounded"
+                  className={`flex gap-1 items-center bg-red-500 text-white px-3 py-1 rounded ${schedule.payment ? 'opacity-50 cursor-not-allowed disabled' : ''}`}
                   onClick={() => handleDelete(schedule.id)}
                 >
                   <MdDeleteForever />Delete
                 </button>
                 <button
-                  className="flex gap-1 items-center bg-green-500 text-white px-3 py-1 rounded"
+                  className={`flex gap-1 items-center bg-green-500 text-white px-3 py-1 rounded ${schedule.payment ? 'opacity-50 cursor-not-allowed disabled' : ''}`}
                   onClick={() => handlePay(schedule.id, schedule.washType?.type ?? '', schedule.washType?.price ?? 0)}
                   disabled={schedule.payment}
                 >
@@ -141,4 +127,3 @@ export default function Schedules(req: Request) {
     </div>
   );
 }
-

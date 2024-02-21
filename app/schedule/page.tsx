@@ -202,7 +202,6 @@ export default function Schedule(req: Request) {
         </div>
         <div>
           <div className="flex p-2 justify-items-start gap-10">
-            {/* <span>Name: {user?.name}</span> */}
             <label className="w-1/2">
               <div className="flex gap-2 items-center">
                 <MdPersonPin className="text-blue-900" />
@@ -252,7 +251,6 @@ export default function Schedule(req: Request) {
                 dateFormat="dd/MM/yyyy hh:mm aa"
                 className="text-blue-900 p-1 rounded-md shadow-xl"
                 id="washDate"
-              // placeholderText="Choose a date and time"
               />
               <p id="scheduledDateError" className="bg-red-100 text-red-500 px-5 text-center">{scheduledDateError}</p>
             </label>
