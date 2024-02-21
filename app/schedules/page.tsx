@@ -77,7 +77,7 @@ export default function Schedules(req: Request) {
           <h1 className="text-xl text-blue-900 mt-3">My Schedules</h1>
         </div>
         <div className="w-1/3 flex justify-end">
-          <Link className="text-sm  text-blue-500 mt-3 mr-3 hover:text-blue-700" href="#" onClick={() => router.back()}>
+          <Link className="text-sm  text-blue-500 mt-3 mr-3 hover:text-blue-700" href="/">
             Back
           </Link>
         </div>
