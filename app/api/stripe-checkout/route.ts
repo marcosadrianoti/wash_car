@@ -30,10 +30,21 @@ export async function POST(req: Request) {
   });
 
   // Create Checkout Session
+  // {
+//   "id": 50,
+//   "userId": "clsdhujad00012k6llbwp0zf3",
+//   "washTypeId": 3, chemical wash
+//   "cityId": 4, goianápolis
+//   "message": "outro teste",
+//   "sheduled_date": "2024-02-16 16:00:00.599",
+//   "payment": false,
+//   "created_at": "2024-02-16 15:16:19.105",
+//   "updated_at": "2024-02-16 15:16:19.105"
+// }
   const session = await stripeGateway.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${DOMAIN}`,
+    success_url: `${DOMAIN}/success?schedule_id=${items[0].schedule_id}`,
     cancel_url: `${DOMAIN}`,
     line_items: lineItems,
     billing_address_collection: 'required',
