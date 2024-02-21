@@ -16,14 +16,14 @@ export default function Success(req: Request) {
       >
         <div className="flex flex-col mt-10 items-center text-center text-white text-3xl p-5 w-full">
           <Image
-            src='/images/success.png'
-            alt="Success Icon"
+            src='/images/cancell.png'
+            alt="Cancel Icon"
             priority={true}
             width={80}
             height={80}
             className='w-auto h-auto'
           />
-            <p className="p-3 w-full font-semibold">Payment Successful!!</p>
+            <p className="p-3 w-full font-semibold">Something Went Wrong!!</p>
           <button
             type="button"
             className='p-4  mt-28 rounded-full bg-green-600 text-bg-color text-base font-medium'

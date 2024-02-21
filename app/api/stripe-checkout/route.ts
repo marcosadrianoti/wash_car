@@ -44,8 +44,8 @@ export async function POST(req: Request) {
   const session = await stripeGateway.checkout.sessions.create({
     payment_method_types: ['card'],
     mode: 'payment',
-    success_url: `${DOMAIN}/success?schedule_id=${items[0].schedule_id}`,
-    cancel_url: `${DOMAIN}`,
+    success_url: `${DOMAIN}/success?schedule_id=${items[0].schedule_id}&userId=${items[0].userId}`,
+    cancel_url: `${DOMAIN}/cancel?schedule_id=${items[0].schedule_id}&userId=${items[0].userId}`,
     line_items: lineItems,
     billing_address_collection: 'required',
   });

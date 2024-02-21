@@ -47,6 +47,7 @@ export default function Schedules(req: Request) {
         },
         quantity: 1,
         schedule_id: id,
+        userId: userId
       },
     ];
 
